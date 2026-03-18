@@ -1,0 +1,103 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Clan {
+  id      Int    @id @default(autoincrement())
+  guildId String @unique
+  name    String
+
+  rules   Rule?
+  members Member[]
+
+  isActive Boolean @default(true)
+
+  bountyHistory BountyHistory[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum GameMode {
+  OSRS
+  RS3
+}
+
+model Rule {
+  id       Int      @id @default(autoincrement())
+  gameMode GameMode
+
+  daysToExpire Int
+  rerolls      Int
+
+  clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  clanId Int  @unique
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Member {
+  id        Int    @id @default(autoincrement())
+  discordId String
+  ign       String
+
+  activeBounties Bounty[]
+  bountyHistory  BountyHistory[]
+
+  points         Int @default(0)
+  bountiesFailed Int @default(0)
+
+  clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  clanId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([discordId, clanId])
+}
+
+model Bounty {
+  id         Int    @id @default(autoincrement())
+  targetName String
+  targetDrop String
+  reward     Int    @default(0)
+
+  expiresAt DateTime
+  rerolls   Int
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId Int
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+  ELITE
+}
+
+model BountyHistory {
+  id Int @id @default(autoincrement())
+
+  targetName   String
+  targetDrop   String
+  difficulty   Difficulty
+  pointsEarned Int
+
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  memberId Int
+
+  clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
+  clanId Int
+
+  completedAt DateTime @default(now())
+}
