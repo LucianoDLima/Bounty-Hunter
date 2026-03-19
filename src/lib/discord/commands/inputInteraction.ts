@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { handleStartUp } from '../../../controller/handleStartUp';
+import { handleSetRules } from '../../../controller/handleSetRules';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction,
@@ -9,6 +10,6 @@ export async function handleChatInputCommand(
   }
 
   if (interaction.commandName === 'rules') {
-    await interaction.reply('rules command - placeholder');
+    await handleSetRules(interaction);
   }
 }
