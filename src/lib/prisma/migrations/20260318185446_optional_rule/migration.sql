@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE "Rule" ALTER COLUMN "daysToExpire" DROP NOT NULL,
+ALTER COLUMN "rerolls" DROP NOT NULL,
+ALTER COLUMN "bountyQty" DROP NOT NULL;

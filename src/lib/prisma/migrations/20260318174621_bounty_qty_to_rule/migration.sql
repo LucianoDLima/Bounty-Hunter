@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Rule" ADD COLUMN     "bountyQty" INTEGER NOT NULL DEFAULT 3;
