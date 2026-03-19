@@ -7,7 +7,7 @@ export function cmdCreateEvent() {
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption((option) =>
       option
-        .setName('game')
+        .setName('gamemode')
         .setDescription('Select your game mode')
         .setRequired(true)
         .addChoices(

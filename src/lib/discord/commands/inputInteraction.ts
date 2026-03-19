@@ -1,9 +1,14 @@
 import { ChatInputCommandInteraction } from 'discord.js';
+import { handleStartUp } from '../../../controller/handleStartUp';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction,
 ) {
   if (interaction.commandName === 'create') {
-    await interaction.reply('create command - placeholder');
+    await handleStartUp(interaction);
+  }
+
+  if (interaction.commandName === 'rules') {
+    await interaction.reply('rules command - placeholder');
   }
 }
