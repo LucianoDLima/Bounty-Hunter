@@ -34,7 +34,9 @@ export async function handleJoinEvent(
       await interaction.channel.send(successEmbed);
     }
 
-    await interaction.editReply('You successfully joined the Bounty Hunter leaderboard!');
+    await interaction.editReply(
+      'You successfully joined the Bounty Hunter leaderboard!',
+    );
   } catch (error) {
     if (error instanceof Error && error.message === 'MEMBER_EXISTS') {
       return interaction.editReply(
@@ -49,7 +51,7 @@ export async function handleJoinEvent(
 
 function getSuccessUI(ign: string, user: User) {
   const description = [
-    `Welcome, **${ign}**! You have been registered for the Bounty Hunter.`,
+    `Welcome, **${user.displayName}**! You have been registered for the Bounty Hunter as **${ign}**.`,
     '',
     'You can get started by checking the rules with `/view rules.`',
     '',
