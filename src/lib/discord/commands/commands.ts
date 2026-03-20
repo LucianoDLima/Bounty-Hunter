@@ -1,6 +1,7 @@
 import { cmdCreateEvent } from './list/start';
 import { cmdSetRules } from './list/rules';
 import { cmdJoinEvent } from './list/join';
+import { cmdNameChange } from './list/namechange';
 
 export const commandList = [
   {
@@ -11,5 +12,8 @@ export const commandList = [
   },
   {
     commandList: cmdJoinEvent(),
+  },
+  {
+    commandList: cmdNameChange(),
   },
 ];
