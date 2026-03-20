@@ -5,7 +5,7 @@ import { handleSetRules } from '../../../controller/handleSetRules';
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction,
 ) {
-  if (interaction.commandName === 'create') {
+  if (interaction.commandName === 'start') {
     await handleStartUp(interaction);
   }
 
