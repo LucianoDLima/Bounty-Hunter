@@ -1,6 +1,7 @@
 import { ChatInputCommandInteraction } from 'discord.js';
 import { handleStartUp } from '../../../controller/handleStartUp';
 import { handleSetRules } from '../../../controller/handleSetRules';
+import { handleJoinEvent } from '../../../controller/handleJoinEvent';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction,
@@ -11,5 +12,9 @@ export async function handleChatInputCommand(
 
   if (interaction.commandName === 'rules') {
     await handleSetRules(interaction);
+  }
+
+  if (interaction.commandName === 'join') {
+    await handleJoinEvent(interaction);
   }
 }
