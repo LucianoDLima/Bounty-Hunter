@@ -19,3 +19,10 @@ export async function createMember(
     },
   });
 }
+
+export async function updateMemberIgn(memberId: number, newIgn: string) {
+  return await prisma.member.update({
+    where: { id: memberId },
+    data: { ign: newIgn },
+  });
+}
