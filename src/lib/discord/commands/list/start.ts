@@ -2,12 +2,12 @@ import { PermissionFlagsBits, SlashCommandBuilder } from 'discord.js';
 
 export function cmdCreateEvent() {
   return new SlashCommandBuilder()
-    .setName('create')
+    .setName('start')
     .setDescription('Bounty Hunter system')
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
     .addStringOption((option) =>
       option
-        .setName('game')
+        .setName('gamemode')
         .setDescription('Select your game mode')
         .setRequired(true)
         .addChoices(

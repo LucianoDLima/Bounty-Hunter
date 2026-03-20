@@ -32,8 +32,9 @@ model Rule {
   id       Int      @id @default(autoincrement())
   gameMode GameMode
 
-  daysToExpire Int
-  rerolls      Int
+  daysToExpire Int? @default(0)
+  rerolls      Int? @default(3)
+  bountyQty    Int? @default(3)
 
   clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
   clanId Int  @unique
@@ -92,6 +93,8 @@ model BountyHistory {
   targetDrop   String
   difficulty   Difficulty
   pointsEarned Int
+
+  discordLink String
 
   member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
   memberId Int
