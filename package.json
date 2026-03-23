@@ -8,6 +8,7 @@
     "command:deploy": "tsx src/lib/discord/config/deploy-commands.ts",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "tsx src/lib/prisma/seed.ts",
     "prisma:push": "prisma db push",
     "prisma:studio": "prisma studio",
     "prisma:format": "prisma format"
