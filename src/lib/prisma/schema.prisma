@@ -12,12 +12,12 @@ model Clan {
   guildId String @unique
   name    String
 
-  rules   Rule?
-  members Member[]
+  rules    Rule?
+  members  Member[]
+  bounties Bounty[]
 
   isActive Boolean @default(true)
 
-  bountyHistory BountyHistory[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -48,11 +48,9 @@ model Member {
   discordId String
   ign       String
 
-  activeBounties Bounty[]
-  bountyHistory  BountyHistory[]
-
   points         Int @default(0)
-  bountiesFailed Int @default(0)
+
+  bounties Bounty[]
 
   clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
   clanId Int
@@ -63,17 +61,34 @@ model Member {
   @@unique([discordId, clanId])
 }
 
+enum BountyStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+}
+
 model Bounty {
   id         Int    @id @default(autoincrement())
-  targetName String
-  targetDrop String
   reward     Int    @default(0)
+  status     BountyStatus @default(ACTIVE)
 
   expiresAt DateTime
   rerolls   Int
 
-  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+  discordLink String?
+  completedAt DateTime?
+
   memberId Int
+  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
+
+  clanId Int
+  clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
+
+  bossId    Int
+  boss      Boss  @relation(fields: [bossId], references: [id])
+
+  dropId    Int?
+  drop      Drop? @relation(fields: [dropId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -86,21 +101,31 @@ enum Difficulty {
   ELITE
 }
 
-model BountyHistory {
-  id Int @id @default(autoincrement())
+model Boss {
+  id       Int      @id @default(autoincrement())
+  name     String
 
-  targetName   String
-  targetDrop   String
-  difficulty   Difficulty
-  pointsEarned Int
+  gameMode GameMode
+  difficulty Difficulty
 
-  discordLink String
+  drops    Drop[]
+  bounties Bounty[]
 
-  member   Member @relation(fields: [memberId], references: [id], onDelete: Cascade)
-  memberId Int
+  @@unique([name, gameMode])
+}
 
-  clan   Clan @relation(fields: [clanId], references: [id], onDelete: Cascade)
-  clanId Int
+model Drop {
+  id     Int    @id @default(autoincrement())
+  name   String
+  points Int    
 
-  completedAt DateTime @default(now())
+  dropRate       String
+  dupeProtection Boolean
+
+  bossId Int
+  boss   Boss   @relation(fields: [bossId], references: [id], onDelete: Cascade)
+
+  bounties Bounty[]
+
+  @@unique([name, bossId])
 }
