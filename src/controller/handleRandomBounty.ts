@@ -70,6 +70,7 @@ export function getBountyAssignedUI(user: User, bounty: BountyWithRelations) {
       { name: 'Points', value: `${bounty.reward}`, inline: true },
       { name: 'Rerolls', value: `${bounty.rerolls}`, inline: true },
       { name: 'Expires', value: expirationValue, inline: true },
+      { name: 'Keyword', value: `*${bounty.keyword}*`, inline: false },
     )
     .setColor(Colors.DarkRed);
   // .setThumbnail(''); TODO: I'll see how i can get boss icons without storing the images myself

@@ -4,6 +4,7 @@ import {
   createBounty,
 } from '../lib/queries/bounty/bounty';
 import { findMemberWithRules } from '../lib/queries/member/member';
+import { generateBountyKeyword } from '../util/bountyKeyword';
 
 export async function generateRandomBounty(discordId: string, clanId: number) {
   const member = await findMemberWithRules(discordId, clanId);
@@ -37,6 +38,8 @@ export async function generateRandomBounty(discordId: string, clanId: number) {
     expiresAt.setDate(expiresAt.getDate() + daysToExpire);
   }
 
+  const keyword = generateBountyKeyword();
+
   const bounty = await createBounty({
     memberId: member.id,
     clanId: clanId,
@@ -45,6 +48,7 @@ export async function generateRandomBounty(discordId: string, clanId: number) {
     reward: randomDrop?.points,
     rerolls: rules.rerolls,
     expiresAt,
+    keyword,
   });
 
   return { bounty };
