@@ -7,6 +7,8 @@ import {
 } from 'discord.js';
 import { verifyClanExist } from '../middleware/verifyClan';
 import { generateRandomBounty } from '../service/randomBounty';
+import { formatWikiLink } from '../util/wikiHyperlink';
+import { Prisma } from '@prisma/client';
 
 export async function handleRandomBounty(
   interaction: ChatInputCommandInteraction,
@@ -47,10 +49,14 @@ export async function handleRandomBounty(
   }
 }
 
-export function getBountyAssignedUI(user: User, bounty: any) {
+type BountyWithRelations = Prisma.BountyGetPayload<{
+  include: { boss: true; drop: true };
+}>;
+
+export function getBountyAssignedUI(user: User, bounty: BountyWithRelations) {
   const target = bounty.drop
-    ? `**${bounty.drop.name}** from **${bounty.boss.name}**`
-    : `Any drop from **${bounty.boss.name}**`;
+    ? `${formatWikiLink(bounty.drop.name, bounty.boss.gameMode)} from ${formatWikiLink(bounty.boss.name, bounty.boss.gameMode)}`
+    : `Any drop from ${formatWikiLink(bounty.boss.name, bounty.boss.gameMode)}`;
 
   const expirationValue = bounty.expiresAt
     ? `<t:${Math.floor(bounty.expiresAt.getTime() / 1000)}:R>`
@@ -62,11 +68,11 @@ export function getBountyAssignedUI(user: User, bounty: any) {
     .addFields(
       { name: 'Target', value: target, inline: false },
       { name: 'Points', value: `${bounty.reward}`, inline: true },
-      { name: 'Rerolls Left', value: `${bounty.rerolls}`, inline: true },
+      { name: 'Rerolls', value: `${bounty.rerolls}`, inline: true },
       { name: 'Expires', value: expirationValue, inline: true },
     )
-    .setColor(Colors.DarkRed)
-    // .setThumbnail(''); TODO: I'll see how i can get boss icons without storing the images myself 
+    .setColor(Colors.DarkRed);
+  // .setThumbnail(''); TODO: I'll see how i can get boss icons without storing the images myself
 
   return { embeds: [embed] };
 }
