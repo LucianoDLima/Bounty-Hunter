@@ -7,8 +7,8 @@ import {
 } from 'discord.js';
 import { verifyClanExist } from '../middleware/verifyClan';
 import { generateRandomBounty } from '../service/randomBounty';
-import { formatWikiLink } from '../util/wikiHyperlink';
 import { Prisma } from '@prisma/client';
+import { generateHyperlink, generateThumbnail } from '../util/linkFormatHelper';
 
 export async function handleRandomBounty(
   interaction: ChatInputCommandInteraction,
@@ -55,12 +55,14 @@ type BountyWithRelations = Prisma.BountyGetPayload<{
 
 export function getBountyAssignedUI(user: User, bounty: BountyWithRelations) {
   const target = bounty.drop
-    ? `${formatWikiLink(bounty.drop.name, bounty.boss.gameMode)} from ${formatWikiLink(bounty.boss.name, bounty.boss.gameMode)}`
-    : `Any drop from ${formatWikiLink(bounty.boss.name, bounty.boss.gameMode)}`;
+    ? `${generateHyperlink(bounty.drop.name, bounty.boss.gameMode)} from ${generateHyperlink(bounty.boss.name, bounty.boss.gameMode)}`
+    : `Any drop from ${generateHyperlink(bounty.boss.name, bounty.boss.gameMode)}`;
 
   const expirationValue = bounty.expiresAt
     ? `<t:${Math.floor(bounty.expiresAt.getTime() / 1000)}:R>`
     : 'Never';
+
+  const thumbnail = generateThumbnail(bounty.boss.name, bounty.boss.gameMode);
 
   const embed = new EmbedBuilder()
     .setTitle('New Bounty')
@@ -72,8 +74,8 @@ export function getBountyAssignedUI(user: User, bounty: BountyWithRelations) {
       { name: 'Expires', value: expirationValue, inline: true },
       { name: 'Keyword', value: `*${bounty.keyword}*`, inline: false },
     )
-    .setColor(Colors.DarkRed);
-  // .setThumbnail(''); TODO: I'll see how i can get boss icons without storing the images myself
+    .setColor(Colors.DarkRed)
+    .setThumbnail(thumbnail);
 
   return { embeds: [embed] };
 }
