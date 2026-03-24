@@ -1,19 +1,26 @@
 import prisma from '../../prisma/client';
 
-export async function findMemberByDiscordId(userId: string, clanId: number) {
+export async function findMemberByDiscordId(discordId: string, clanId: number) {
   return await prisma.member.findFirst({
-    where: { discordId: userId, clanId: clanId },
+    where: { discordId, clanId },
+  });
+}
+
+export async function findMemberWithRules(discordId: string, clanId: number) {
+  return await prisma.member.findUnique({
+    where: { discordId_clanId: { discordId, clanId } },
+    include: { clan: { include: { rules: true } } },
   });
 }
 
 export async function createMember(
-  userId: string,
+  discordId: string,
   ign: string,
   clanId: number,
 ) {
   return await prisma.member.create({
     data: {
-      discordId: userId,
+      discordId,
       ign,
       clan: { connect: { id: clanId } },
     },
