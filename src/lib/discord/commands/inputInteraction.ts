@@ -3,6 +3,7 @@ import { handleStartUp } from '../../../controller/handleStartUp';
 import { handleSetRules } from '../../../controller/handleSetRules';
 import { handleJoinEvent } from '../../../controller/handleJoinEvent';
 import { handleNameChange } from '../../../controller/handleNameChange';
+import { handleRandomBounty } from '../../../controller/handleRandomBounty';
 
 export async function handleChatInputCommand(
   interaction: ChatInputCommandInteraction,
@@ -21,5 +22,9 @@ export async function handleChatInputCommand(
 
   if (interaction.commandName === 'namechange') {
     await handleNameChange(interaction);
+  }
+
+  if (interaction.commandName === 'bounty') {
+    await handleRandomBounty(interaction);
   }
 }
