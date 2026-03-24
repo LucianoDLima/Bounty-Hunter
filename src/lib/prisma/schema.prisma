@@ -72,7 +72,7 @@ model Bounty {
   reward     Int    @default(0)
   status     BountyStatus @default(ACTIVE)
 
-  expiresAt DateTime
+  expiresAt DateTime?
   rerolls   Int
 
   discordLink String?
