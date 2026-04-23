@@ -8,7 +8,7 @@ const sameRate = [
 ];
 
 export const raksha: Prisma.BossCreateInput = {
-  name: 'Raksha',
+  name: 'Raksha, the Shadow Colossus',
   gameMode: GameMode.RS3,
   difficulty: Difficulty.HARD,
   drops: {
